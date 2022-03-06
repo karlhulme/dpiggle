@@ -3,7 +3,7 @@ import {
   OperationInterruptedError,
   OperationTransitoryError,
   retryable,
-} from "../src/index.ts";
+} from "../mod.ts";
 
 class CustomTransitoryError extends OperationTransitoryError {}
 class BespokeError extends Error {}
