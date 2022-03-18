@@ -1,4 +1,4 @@
-import { assertEquals, assertRejects, assertSpyCalls, spy } from "../deps.ts";
+import { assertStrictEquals, assertRejects, assertSpyCalls, spy } from "../deps.ts";
 import {
   OperationInterruptedError,
   OperationTransitoryError,
@@ -28,7 +28,7 @@ Deno.test("An operation that passes is executed once.", async () => {
   const testOp = spy(createTestOperation([123]));
 
   const result = await retryable(testOp);
-  assertEquals(result, 123);
+  assertStrictEquals(result, 123);
 
   assertSpyCalls(testOp, 1);
 });
@@ -47,7 +47,7 @@ Deno.test("An operation that fails with transitory errors derived from Operation
   ]));
 
   const result = await retryable(testOp);
-  assertEquals(result, 123);
+  assertStrictEquals(result, 123);
   assertSpyCalls(testOp, 3);
 });
 
@@ -61,7 +61,7 @@ Deno.test("An operation that fails with transitory bespoke errors is re-tried an
     isErrorTransient: (err) => err instanceof BespokeError,
   });
 
-  assertEquals(result, 123);
+  assertStrictEquals(result, 123);
   assertSpyCalls(testOp, 2);
 });
 
