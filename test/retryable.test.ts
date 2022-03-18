@@ -1,4 +1,9 @@
-import { assertStrictEquals, assertRejects, assertSpyCalls, spy } from "../deps.ts";
+import {
+  assertRejects,
+  assertSpyCalls,
+  assertStrictEquals,
+  spy,
+} from "../deps.ts";
 import {
   OperationInterruptedError,
   OperationTransitoryError,
