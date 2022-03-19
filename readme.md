@@ -58,5 +58,4 @@ async function doWork(newValue: string): Promise<void> {
 
 ## Commands
 
-Run `deno test --coverage=cov_profile && deno coverage cov_profile` to test and
-check coverage.
+Run `deno task check` to format and test.
