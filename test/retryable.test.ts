@@ -34,13 +34,26 @@ Deno.test("An operation that passes is executed once.", async () => {
 
   const result = await retryable(testOp);
   assertStrictEquals(result, 123);
-
   assertSpyCalls(testOp, 1);
 });
 
 Deno.test("An operation that fails with a permanent error is executed once and raises the underlying error.", async () => {
   const testOp = spy(createTestOperation([new Error("FAIL")]));
   await assertRejects(() => retryable(testOp), Error, "FAIL");
+  assertSpyCalls(testOp, 1);
+});
+
+Deno.test("An operation that fails with a permanent network error is executed once and raises the underlying error.", async () => {
+  const testOp = spy(
+    createTestOperation([new TypeError("scheme 'madeup' not supported")]),
+  );
+
+  await assertRejects(
+    () => retryable(testOp),
+    TypeError,
+    "scheme 'madeup' not supported",
+  );
+
   assertSpyCalls(testOp, 1);
 });
 
@@ -72,7 +85,7 @@ Deno.test("An operation that fails with transitory bespoke errors is re-tried an
 
 Deno.test("An operation that fails with transitory errors too many times raises the last transitory error.", async () => {
   const testOp = spy(createTestOperation([
-    new OperationTransitoryError("STANDARD"),
+    new TypeError("temporary"),
     new OperationTransitoryError("STANDARD"),
     new OperationTransitoryError("LAST"),
   ]));
