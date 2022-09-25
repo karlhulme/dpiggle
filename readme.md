@@ -7,8 +7,8 @@ Define an asynchronous javascript function. Pass that function to piggle to
 execute.
 
 Piggle will automatically retry the function if a transitory error is raised
-using an exponential backoff strategy. The errors considered transitory and the
-backoff strategy can be configured.
+using an exponential backoff strategy. You can configure which errors are
+considered transitory along with the backoff strategy.
 
 There's a good piggle!
 
