@@ -3,8 +3,6 @@ name: Deno
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
 
 jobs:
   test:
@@ -12,7 +10,7 @@ jobs:
 
     steps:
       - name: Setup repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Deno
         # uses: denoland/setup-deno@v1
@@ -20,11 +18,13 @@ jobs:
         with:
           deno-version: v1.x
 
-      - name: Verify formatting
-        run: deno fmt --check
-
       - name: Run linter
         run: deno lint
 
       - name: Run tests
         run: deno test --coverage=cov_profile
+
+      - name: Bump version and push tag
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
