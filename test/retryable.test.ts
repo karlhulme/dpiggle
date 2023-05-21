@@ -57,6 +57,32 @@ Deno.test("An operation that fails with a permanent network error is executed on
   assertSpyCalls(testOp, 1);
 });
 
+Deno.test("An operation that fails with transitory (unrecognised) network errors is re-tried and can succeed.", async () => {
+  const testOp = spy(createTestOperation([
+    new TypeError("UNKNOWN"),
+    123,
+  ]));
+
+  const result = await retryable(testOp);
+  assertStrictEquals(result, 123);
+  assertSpyCalls(testOp, 2);
+});
+
+Deno.test("An operation that fails with transitory marked errors is re-tried and can succeed.", async () => {
+  // deno-lint-ignore no-explicit-any
+  const markedErr = new Error() as any;
+  markedErr.__isTransitory = true;
+
+  const testOp = spy(createTestOperation([
+    markedErr,
+    123,
+  ]));
+
+  const result = await retryable(testOp);
+  assertStrictEquals(result, 123);
+  assertSpyCalls(testOp, 2);
+});
+
 Deno.test("An operation that fails with transitory errors derived from OperationTransitoryError is re-tried and can succeed.", async () => {
   const testOp = spy(createTestOperation([
     new OperationTransitoryError("STANDARD"),

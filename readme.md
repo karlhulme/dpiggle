@@ -12,6 +12,16 @@ considered transitory along with the backoff strategy.
 
 There's a good piggle!
 
+## Transitory Errors
+
+Piggle will treat most `TypeError`s as transient. These are the errors raised by
+the fetch implementation when the server cannot be reached.
+
+Piggle will treat any error derived from OperationTransitoryError has transient.
+
+Piggle will treat any error which has an `__isTransitory` property with a truthy
+value as transient.
+
 ## Example
 
 In the example below, functions `setValueOnService` and `setValueAtDatabase` are
@@ -58,4 +68,4 @@ async function doWork(newValue: string): Promise<void> {
 
 ## Commands
 
-Run `deno task check` to format and test.
+Run `deno task test` to test the library and trigger formatting.

@@ -1,3 +1,4 @@
+import { isTransitoryMarkedError } from "./isTransitoryMarkedError.ts";
 import { isTransitoryNetworkError } from "./isTransitoryNetworkError.ts";
 import {
   OperationInterruptedError,
@@ -81,6 +82,7 @@ export async function retryable<T>(
     } catch (err) {
       const isTransientError = (err instanceof OperationTransitoryError) ||
         isTransitoryNetworkError(err) ||
+        isTransitoryMarkedError(err) ||
         (options?.isErrorTransient && options.isErrorTransient(err));
 
       if (isTransientError) {
